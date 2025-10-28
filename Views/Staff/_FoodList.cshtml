@@ -1,0 +1,52 @@
+@model IEnumerable<RestaurantMVC.Models.MonAn>
+@{
+    var tableId = ViewBag.TableId;
+}
+<h5>🍽 Chọn món cho bàn @tableId</h5>
+
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Tên món</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mon in Model)
+        {
+            <tr>
+                <td>@mon.TenMon</td>
+                <td>@String.Format("{0:N0}", mon.Gia)</td>
+                <td><input type="number" id="qty-@mon.MaMon" value="1" min="1" class="form-control form-control-sm"
+                        style="width:70px;"></td>
+                <td><button class="btn btn-success btn-sm" onclick="addItem(@tableId,@mon.MaMon)">Thêm</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="current-order"></div>
+
+<script>
+    function addItem(tableId, foodId) {
+        const qty = $(`#qty-${foodId}`).val();
+        fetch("/Staff/AddItem", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `tableId=${tableId}&foodId=${foodId}&quantity=${qty}`
+        })
+            .then(res => {
+                if (res.ok) {
+                    $("#current-order").load(`/Staff/CurrentOrder?tableId=${tableId}`);
+                } else {
+                    console.error("Lỗi khi thêm món:", res.status);
+                }
+            });
+    }
+
+    $(function () {
+        $("#current-order").load(`/Staff/CurrentOrder?tableId=${@tableId}`);
+    });
+</script>

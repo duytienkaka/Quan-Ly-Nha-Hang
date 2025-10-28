@@ -1,0 +1,26 @@
+@{
+    Layout = "_LayoutCashier";
+    ViewData["Title"] = "Trang Thu Ngân";
+}
+<div class="row">
+    <div class="col-md-5">
+        <h4>📋 Danh sách bàn</h4>
+        <div id="table-list"></div>
+    </div>
+    <div class="col-md-7">
+        <h4>🍽 Chi tiết đơn hàng</h4>
+        <div id="order-detail" class="border p-3 bg-white rounded"></div>
+    </div>
+</div>
+
+<script>
+$(function(){
+    // Load danh sách bàn khi trang mở
+    $("#table-list").load("/Cashier/TableList");
+});
+
+// Khi chọn bàn
+function selectTable(id){
+    $("#order-detail").load(`/Cashier/OrderDetail?tableId=${id}`);
+}
+</script>

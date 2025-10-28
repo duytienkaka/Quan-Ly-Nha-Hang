@@ -1,0 +1,32 @@
+@{
+    var tableId = ViewBag.TableId;
+}
+
+<div class="modal fade" id="paymentModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">💵 Xác nhận thanh toán</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc muốn thanh toán cho bàn <strong>@tableId</strong> không?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-success" onclick="confirmPay(@tableId)">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function confirmPay(tableId){
+    fetch(`/Cashier/Pay?tableId=${tableId}`, { method:"POST" })
+        .then(() => {
+            bootstrap.Modal.getInstance(document.getElementById("paymentModal")).hide();
+            $("#order-detail").html('<p class="text-success">✅ Đã thanh toán thành công!</p>');
+            $("#table-list").load("/Cashier/TableList");
+        });
+}
+</script>

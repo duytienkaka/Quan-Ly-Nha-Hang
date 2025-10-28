@@ -1,0 +1,105 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  width: 230px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 20px;
+}
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar li {
+  margin-bottom: 10px;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+.sidebar a:hover {
+  background-color: #34495e;
+}
+#main-content {
+  flex: 1;
+  background-color: #ecf0f1;
+  padding: 25px;
+  overflow-y: auto;
+}
+.table-list, .food-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.card h4 {
+  margin: 0 0 5px 0;
+}
+.btn {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #3498db;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 13px;
+}
+.btn:hover {
+  background: #2980b9;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.data-table th, .data-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+.data-table th {
+  background-color: #bdc3c7;
+  font-weight: 600;
+}
+.data-table tr:hover {
+  background-color: #f9f9f9;
+}
+.btn {
+  background-color: #3498db;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-danger {
+  background-color: #e74c3c;
+}
+td:nth-child(4) {
+  font-weight: 600;
+  color: #2c3e50;
+}

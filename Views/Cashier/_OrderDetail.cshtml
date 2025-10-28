@@ -1,0 +1,48 @@
+@model RestaurantMVC.Models.Order
+
+@if (Model == null)
+{
+    <p>❌ Bàn này hiện không có đơn hàng đang phục vụ.</p>
+}
+else
+{
+    <h5>🪑 Đơn hàng cho bàn @Model.MaBan</h5>
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Món ăn</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var ct in Model.ChiTietOrders)
+        {
+            <tr>
+                <td>@ct.MonAn.TenMon</td>
+                <td>@ct.SoLuong</td>
+                <td>@String.Format("{0:N0} đ", ct.DonGia)</td>
+                <td>@String.Format("{0:N0} đ", ct.SoLuong * ct.DonGia)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    var tong = Model.ChiTietOrders.Sum(x => x.SoLuong * x.DonGia);
+    <h5 class="text-end mt-3">Tổng cộng: <strong>@String.Format("{0:N0} đ", tong)</strong></h5>
+
+    <div class="text-end mt-3">
+        <button class="btn btn-success" onclick="openPayment(@Model.MaBan)">💵 Thanh toán</button>
+    </div>
+
+    <div id="paymentModalContainer"></div>
+}
+<script>
+function openPayment(tableId){
+    $("#paymentModalContainer").load(`/Cashier/PayModal?tableId=${tableId}`, () => {
+        const modal = new bootstrap.Modal(document.getElementById("paymentModal"));
+        modal.show();
+    });
+}
+</script>

@@ -1,0 +1,44 @@
+@model RestaurantMVC.Models.Ban
+
+<form id="tableForm">
+    <div class="modal-header">
+        <h5 class="modal-title">@((Model.MaBan == 0) ? "Thêm bàn mới" : "Cập nhật bàn")</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label>Tên bàn</label>
+            <input asp-for="TenBan" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label>Khu vực</label>
+            <input asp-for="KhuVuc" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label>Sức chứa</label>
+            <input asp-for="SucChua" class="form-control" type="number"/>
+        </div>
+        <div class="mb-3">
+            <label>Trạng thái</label>
+            <select asp-for="TrangThai" class="form-select"
+                    asp-items="Html.GetEnumSelectList<RestaurantMVC.Models.TrangThaiBan>()"></select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</form>
+
+<script>
+$("#tableForm").submit(function(e){
+    e.preventDefault();
+    const formData = $(this).serialize();
+    const url = "@(Model.MaBan == 0 ? "/Admin/CreateTable" : "/Admin/EditTable")";
+    fetch(url, {method:"POST", headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:formData})
+        .then(()=> {
+            $("#tableModal").modal('hide');
+            $("#main-content").load("/Admin/ManageTables");
+        });
+});
+</script>

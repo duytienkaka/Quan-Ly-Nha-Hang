@@ -1,0 +1,22 @@
+@{
+    Layout = "_LayoutCustomer";
+    ViewData["Title"] = "Trang khách hàng";
+}
+
+<div class="row">
+  <div class="col-md-6">
+    <h5>🪑 Đặt bàn</h5>
+    <div id="booking-form"></div>
+  </div>
+  <div class="col-md-6">
+    <h5>📅 Lịch sử đặt bàn</h5>
+    <div id="booking-history"></div>
+  </div>
+</div>
+
+<script>
+$(function(){
+  $("#booking-form").load("/CustomerHome/BookingForm");
+  $("#booking-history").load("/CustomerHome/BookingHistory");
+});
+</script>

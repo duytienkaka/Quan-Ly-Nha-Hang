@@ -1,0 +1,54 @@
+@model IEnumerable<RestaurantMVC.Models.NhanVien>
+
+<h3>👨‍💼 Quản lý nhân viên</h3>
+<button class="btn btn-success mb-3" id="btnAddEmployee">➕ Thêm nhân viên</button>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã NV</th>
+            <th>Họ tên</th>
+            <th>Tên đăng nhập</th>
+            <th>Vai trò</th>
+            <th>Chức vụ</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nv in Model)
+        {
+            <tr>
+                <td>@nv.MaNV</td>
+                <td>@nv.HoTen</td>
+                <td>@nv.TenDangNhap</td>
+                <td>@nv.VaiTro</td>
+                <td>@nv.ChucVu</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editEmployee(@nv.MaNV)">Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteEmployee(@nv.MaNV)">Xóa</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="employeeModalContent"></div>
+  </div>
+</div>
+
+<script>
+$("#btnAddEmployee").click(() => {
+    $("#employeeModalContent").load("/Admin/CreateEmployee", () => $("#employeeModal").modal('show'));
+});
+function editEmployee(id){
+    $("#employeeModalContent").load(`/Admin/EditEmployee/${id}`, () => $("#employeeModal").modal('show'));
+}
+function deleteEmployee(id){
+    if(confirm("Xác nhận xóa nhân viên này?")){
+        fetch(`/Admin/DeleteEmployee/${id}`, {method:"POST"}).then(() => $("#main-content").load("/Admin/ManageEmployees"));
+    }
+}
+</script>

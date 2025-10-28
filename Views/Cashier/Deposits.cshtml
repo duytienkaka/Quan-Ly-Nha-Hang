@@ -1,0 +1,29 @@
+@model IEnumerable<RestaurantMVC.Models.Order>
+
+<h4>💰 Danh sách bàn đã cọc</h4>
+<table class="table table-bordered">
+<thead class="table-light">
+<tr><th>Bàn</th><th>Khách</th><th>Số tiền cọc</th><th>Thời gian</th><th></th></tr>
+</thead>
+<tbody>
+@foreach(var o in Model)
+{
+  <tr>
+    <td>@o.Ban.TenBan</td>
+    <td>@o.GhiChu</td>
+    <td>@String.Format("{0:N0} đ", o.SoTienCoc)</td>
+    <td>@o.ThoiGian.ToString("HH:mm dd/MM")</td>
+    <td>
+      <form asp-action="ConfirmDeposit" method="post">
+        <input type="hidden" name="orderId" value="@o.MaOrder" />
+        <button type="submit" class="btn btn-success btn-sm">Xác nhận</button>
+      </form>
+    </td>
+  </tr>
+}
+</tbody>
+</table>
+@if (!Model.Any())
+{
+  <p class="text-muted">Chưa có bàn nào được cọc.</p>
+}

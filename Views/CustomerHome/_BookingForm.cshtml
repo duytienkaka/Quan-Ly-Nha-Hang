@@ -1,0 +1,64 @@
+@model IEnumerable<RestaurantMVC.Models.Ban>
+
+<form id="formBooking" class="border rounded p-3 bg-white">
+  <div class="mb-2">
+    <label>Họ tên:</label>
+    <input type="text" class="form-control" id="hoTen" required>
+  </div>
+  <div class="mb-2">
+    <label>Số điện thoại:</label>
+    <input type="text" class="form-control" id="soDienThoai" required>
+  </div>
+  <div class="mb-2">
+    <label>Số người:</label>
+    <input type="number" class="form-control" id="soNguoi" min="1" required>
+  </div>
+  <div class="mb-2">
+    <label>Bàn:</label>
+    <select class="form-select" id="tableId" required>
+      <option value="">-- Chọn bàn trống --</option>
+      @foreach (var b in Model)
+      {
+          <option value="@b.MaBan">@b.TenBan (Sức chứa: @b.SucChua)</option>
+      }
+    </select>
+  </div>
+  <div class="mb-2">
+    <label>Ghi chú:</label>
+    <textarea class="form-control" id="ghiChu"></textarea>
+  </div>
+  <button type="button" class="btn btn-success" onclick="bookTable()">Đặt bàn</button>
+</form>
+
+<script>
+function bookTable(){
+  const data = {
+    tableId: $("#tableId").val(),
+    hoTen: $("#hoTen").val(),
+    soDienThoai: $("#soDienThoai").val(),
+    soNguoi: $("#soNguoi").val(),
+    ghiChu: $("#ghiChu").val()
+  };
+  fetch("/CustomerHome/Book", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: $.param(data)
+  }).then(r => r.json()).then(result => {
+    if(result.orderId){
+      const coc = prompt("💳 Nhập số tiền cọc để xác nhận đặt bàn:");
+      if(coc){
+        fetch("/CustomerHome/PayDeposit", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `orderId=${result.orderId}&amount=${coc}`
+        }).then(() => {
+          alert("✅ Đặt bàn và thanh toán cọc thành công!");
+          $("#booking-form").load("/CustomerHome/BookingForm");
+          $("#booking-history").load("/CustomerHome/BookingHistory");
+        });
+      }
+    }
+  });
+}
+
+</script>

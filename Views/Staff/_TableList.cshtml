@@ -1,0 +1,23 @@
+@model IEnumerable<RestaurantMVC.Models.Ban>
+
+<div class="row">
+@foreach (var b in Model)
+{
+    var color = b.TrangThai switch
+    {
+        RestaurantMVC.Models.TrangThaiBan.TRONG => "bg-success",
+        RestaurantMVC.Models.TrangThaiBan.DANG_PHUC_VU => "bg-danger",
+        RestaurantMVC.Models.TrangThaiBan.DAT_TRUOC => "bg-warning text-dark",
+        RestaurantMVC.Models.TrangThaiBan.CAN_DON => "bg-secondary",
+        _ => "bg-light"
+    };
+    <div class="col-6 col-md-4 mb-3">
+        <div class="card text-center text-white @color" style="cursor:pointer;" onclick="selectTable(@b.MaBan)">
+            <div class="card-body">
+                <h6 class="card-title">@b.TenBan</h6>
+                <small>@b.TrangThai</small>
+            </div>
+        </div>
+    </div>
+}
+</div>

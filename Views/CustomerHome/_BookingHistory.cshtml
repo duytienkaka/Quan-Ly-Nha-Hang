@@ -1,0 +1,48 @@
+@model IEnumerable<RestaurantMVC.Models.Order>
+
+@if (!Model.Any())
+{
+  <p class="text-muted">Bạn chưa có đặt bàn nào.</p>
+}
+else
+{
+  <table class="table table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>Bàn</th><th>Thời gian</th><th>Ghi chú</th><th>Trạng thái</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+    @foreach (var o in Model)
+    {
+      <tr>
+        <td>@o.Ban?.TenBan</td>
+        <td>@o.ThoiGian.ToString("dd/MM/yyyy HH:mm")</td>
+        <td>@o.GhiChu</td>
+        <td>@o.TrangThai</td>
+        <td>
+          @if (o.TrangThai == RestaurantMVC.Models.TrangThaiOrder.MO)
+          {
+            <button class="btn btn-danger btn-sm" onclick="cancelBooking(@o.MaOrder)">Hủy</button>
+          }
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+}
+
+<script>
+function cancelBooking(orderId){
+  if(confirm("Bạn có chắc muốn hủy đặt bàn này?")){
+    fetch("/CustomerHome/CancelBooking", {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: "orderId=" + orderId
+    }).then(() => {
+      $("#booking-history").load("/CustomerHome/BookingHistory");
+      $("#booking-form").load("/CustomerHome/BookingForm");
+    });
+  }
+}
+</script>

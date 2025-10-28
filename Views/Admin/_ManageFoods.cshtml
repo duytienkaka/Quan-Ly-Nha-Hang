@@ -1,0 +1,59 @@
+@model IEnumerable<RestaurantMVC.Models.MonAn>
+
+<h3>🍜 Quản lý món ăn</h3>
+<button class="btn btn-success mb-3" id="btnAddFood">➕ Thêm món</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã</th><th>Tên món</th><th>Loại</th><th>Giá</th><th>Tình trạng</th><th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var m in Model)
+    {
+        <tr>
+            <td>@m.MaMon</td>
+            <td>@m.TenMon</td>
+            <td>@m.Loai</td>
+            <td>@String.Format("{0:N0} đ", m.Gia)</td>
+            <td>@m.TinhTrang</td>
+            <td>
+                <button class="btn btn-primary btn-sm" onclick="editFood(@m.MaMon)">Sửa</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteFood(@m.MaMon)">Xóa</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div class="modal fade" id="foodModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="foodModalContent"></div>
+  </div>
+</div>
+
+<script>
+$("#btnAddFood").click(() => {
+    // load partial form
+    $("#foodModalContent").load("/Admin/CreateFood", () => {
+        const modal = new bootstrap.Modal(document.getElementById('foodModal'));
+        modal.show();
+    });
+});
+
+function editFood(id){
+    $("#foodModalContent").load(`/Admin/EditFood/${id}`, () => {
+        const modal = new bootstrap.Modal(document.getElementById('foodModal'));
+        modal.show();
+    });
+}
+
+function deleteFood(id){
+    if(confirm("Xác nhận xóa món này?")){
+        fetch(`/Admin/DeleteFood/${id}`, {method:"POST"})
+            .then(()=>$("#main-content").load("/Admin/ManageFoods"));
+    }
+}
+</script>
+

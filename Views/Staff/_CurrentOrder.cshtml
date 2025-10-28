@@ -1,0 +1,29 @@
+@model RestaurantMVC.Models.Order
+
+@if (Model == null)
+{
+  <p class="mt-3 text-muted">🕑 Chưa có món nào được gọi.</p>
+}
+else
+{
+  <h6 class="mt-3">Đơn hàng hiện tại</h6>
+  <table class="table table-sm table-bordered mt-2">
+    <thead class="table-light">
+      <tr><th>Món ăn</th><th>Số lượng</th><th>Thành tiền</th></tr>
+    </thead>
+    <tbody>
+      @foreach (var ct in Model.ChiTietOrders)
+      {
+          <tr>
+              <td>@ct.MonAn.TenMon</td>
+              <td>@ct.SoLuong</td>
+              <td>@String.Format("{0:N0} đ", ct.SoLuong * ct.DonGia)</td>
+          </tr>
+      }
+    </tbody>
+  </table>
+}
+@{
+    var total = Model?.ChiTietOrders.Sum(x => x.SoLuong * x.DonGia) ?? 0;
+}
+    <p><strong>Tổng cộng: </strong> @String.Format("{0:N0} đ", total)</p>

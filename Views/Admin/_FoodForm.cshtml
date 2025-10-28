@@ -1,0 +1,44 @@
+@model RestaurantMVC.Models.MonAn
+
+<form id="foodForm">
+    <div class="modal-header">
+        <h5 class="modal-title">@((Model.MaMon == 0) ? "Thêm món" : "Cập nhật món")</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label>Tên món</label>
+            <input asp-for="TenMon" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Loại</label>
+            <input asp-for="Loai" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Giá</label>
+            <input asp-for="Gia" class="form-control" type="number" />
+        </div>
+        <div class="mb-3">
+            <label>Tình trạng</label>
+            <select asp-for="TinhTrang" class="form-select"
+                    asp-items="Html.GetEnumSelectList<RestaurantMVC.Models.TinhTrangMon>()"></select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</form>
+
+<script>
+$("#foodForm").submit(function(e){
+    e.preventDefault();
+    const formData = $(this).serialize();
+    const url = "@(Model.MaMon == 0 ? "/Admin/CreateFood" : "/Admin/EditFood")";
+    fetch(url, {method:"POST", headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:formData})
+        .then(()=> {
+            $("#foodModal").modal('hide');
+            $("#main-content").load("/Admin/ManageFoods");
+        });
+});
+</script>

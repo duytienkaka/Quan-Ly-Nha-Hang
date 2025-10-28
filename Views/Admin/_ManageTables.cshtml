@@ -1,0 +1,64 @@
+@model IEnumerable<RestaurantMVC.Models.Ban>
+
+<h3>📋 Quản lý bàn ăn</h3>
+<button class="btn btn-success mb-3" id="btnAddTable">➕ Thêm bàn mới</button>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã bàn</th>
+            <th>Tên bàn</th>
+            <th>Khu vực</th>
+            <th>Sức chứa</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.MaBan</td>
+                <td>@b.TenBan</td>
+                <td>@b.KhuVuc</td>
+                <td>@b.SucChua</td>
+                <td>@b.TrangThai</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editTable(@b.MaBan)">Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTable(@b.MaBan)">Xóa</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="tableModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="tableModalContent"></div>
+  </div>
+</div>
+
+<script>
+$("#btnAddTable").click(() => {
+    $("#tableModalContent").load("/Admin/CreateTable", () => {
+        const modal = new bootstrap.Modal(document.getElementById('tableModal'));
+        modal.show();
+    });
+});
+
+function editTable(id){
+    $("#tableModalContent").load(`/Admin/EditTable/${id}`, () => {
+        const modal = new bootstrap.Modal(document.getElementById('tableModal'));
+        modal.show();
+    });
+}
+
+function deleteTable(id){
+    if(confirm("Xác nhận xóa bàn này?")){
+        fetch(`/Admin/DeleteTable/${id}`, {method:"POST"})
+            .then(()=>$("#main-content").load("/Admin/ManageTables"));
+    }
+}
+</script>
+
